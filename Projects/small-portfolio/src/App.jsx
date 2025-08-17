@@ -1,6 +1,8 @@
+// src/App.jsx
 import Header from './components/Header'
 import Hero from './components/Hero'
 import About from './components/About'
+import Skills from './components/Skills'
 
 function App() {
   return (
@@ -9,6 +11,7 @@ function App() {
       <main className="container">
         <Hero />
         <About />
+        <Skills />
       </main>
     </>
   )
