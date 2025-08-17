@@ -1,0 +1,25 @@
+Project: Personal Portfolio Website  
+Built with: React (Vite) + CSS  
+
+Description:  
+A beginner-friendly personal portfolio website built using React with Vite.  
+It features a dark smoky theme and is fully responsive for desktop and mobile.  
+The project is structured with separate functional components, each having its own CSS file.  
+
+Sections:  
+- Header with navigation links  
+- Hero with intro and call-to-action button  
+- About with short bio  
+- Skills in a grid layout  
+- Projects with sample cards  
+- Footer with copyright and social links  
+
+Key Features:  
+- Dark smoky modern design  
+- Responsive layout  
+- Clean and modular file structure  
+- Beginner-friendly (no hooks or state management)  
+
+Purpose:  
+Created to practice React basics (JSX, functional components, and styling).  
+Can be customized into a personal portfolio template.
