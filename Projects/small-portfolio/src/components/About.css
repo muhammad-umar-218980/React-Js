@@ -1,0 +1,33 @@
+.about-card {
+	background: var(--card-bg);
+	border-radius: 12px;
+	padding: 2rem;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+	border: 1px solid var(--border);
+}
+
+.about-item {
+	display: flex;
+	margin-bottom: 1.25rem;
+	gap: 1rem;
+}
+
+.about-item.intro {
+	display: block;
+}
+
+.label {
+	font-weight: 600;
+	color: var(--accent);
+	min-width: 120px;
+}
+
+.value {
+	flex: 1;
+	color: var(--text-main);
+}
+
+.intro .value {
+	margin-top: 0.5rem;
+	padding-left: 0;
+}
