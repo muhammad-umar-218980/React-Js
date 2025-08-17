@@ -1,0 +1,40 @@
+.hero {
+	min-height: 85vh;
+	display: flex;
+	align-items: center;
+	text-align: center;
+	padding: 2rem 0;
+}
+
+.hero-content {
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+.greeting {
+	font-size: 1.2rem;
+	color: var(--accent);
+	margin-bottom: 1rem;
+	font-weight: 600;
+}
+
+.hero h1 {
+	font-size: 3rem;
+	margin-bottom: 1.5rem;
+	background: linear-gradient(to right, #f1f5f9, #9ca3af);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+.subtitle {
+	font-size: 1.25rem;
+	margin-bottom: 0.5rem;
+	color: var(--text-muted);
+}
+
+.tagline {
+	font-size: 1.1rem;
+	color: var(--accent);
+	font-weight: 500;
+}
