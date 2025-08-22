@@ -1,0 +1,84 @@
+--------------------
+18. Fragments in React
+--------------------
+
+1. What are Fragments?
+- Fragments let you group multiple child elements without adding an extra <div> or wrapper in the DOM.
+- This helps keep the DOM clean and avoids unnecessary nesting.
+
+Example (Without Fragments):
+function App() {
+  return (
+    <div>
+      <h1>Heading</h1>
+      <p>Paragraph</p>
+    </div>
+  );
+}
+=> Output DOM will have an extra <div> wrapping everything.
+
+Example (With Fragments):
+function App() {
+  return (
+    <React.Fragment>
+      <h1>Heading</h1>
+      <p>Paragraph</p>
+    </React.Fragment>
+  );
+}
+=> Output DOM will only contain <h1> and <p>, no extra wrapper.
+
+--------------------
+2. Why use Fragments?
+- Avoids unnecessary parent elements.
+- Prevents unwanted side effects in styling/layout caused by extra wrappers.
+- Useful when returning multiple elements in a component or in lists.
+
+Example:
+function List() {
+  return (
+    <React.Fragment>
+      <li>Apple</li>
+      <li>Banana</li>
+      <li>Mango</li>
+    </React.Fragment>
+  );
+}
+
+--------------------
+3. Syntax Options
+a) Full Syntax:
+<React.Fragment>
+  <h1>Title</h1>
+  <p>Description</p>
+</React.Fragment>
+
+b) Short Syntax (Preferred):
+<>
+  <h1>Title</h1>
+  <p>Description</p>
+</>
+
+--------------------
+4. Notes
+- No installation or npm package required, Fragments are built into React.
+- Short syntax <>...</> does NOT support keys.
+- Use <React.Fragment key="something"> when rendering lists that need keys.
+
+Example with keys:
+function Items() {
+  return (
+    <React.Fragment key="items-group">
+      <li>One</li>
+      <li>Two</li>
+    </React.Fragment>
+  );
+}
+
+--------------------
+Summary:
+- Fragments = group elements without extra DOM node.
+- Use when you don’t want an unnecessary wrapper.
+- Syntax: <React.Fragment>...</React.Fragment> OR short <>...</>.
+- No extra library or npm install needed.
+--------------------
