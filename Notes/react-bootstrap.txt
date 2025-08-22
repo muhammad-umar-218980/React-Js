@@ -1,0 +1,90 @@
+React-Bootstrap Notes
+
+What is React-Bootstrap?
+    A library that replaces Bootstrap's CSS class usage with actual React components.
+    Instead of writing <div class="btn btn-primary">, you use <Button variant="primary">.
+    Makes Bootstrap more "React-friendly".
+
+Why use React-Bootstrap?
+    - No need to remember class names, just use components.
+    - More readable and maintainable code.
+    - Full integration with React’s component system.
+    - Still customizable with Bootstrap CSS.
+
+Install:
+    npm install react-bootstrap bootstrap
+
+Import Bootstrap CSS:
+    import "bootstrap/dist/css/bootstrap.min.css";
+
+Import React-Bootstrap Components:
+    import { Button, Navbar, Container, Nav } from "react-bootstrap";
+
+Example 1: Button
+    import React from "react";
+    import { Button } from "react-bootstrap";
+    import "bootstrap/dist/css/bootstrap.min.css";
+
+    function App() {
+        return (
+            <div>
+                <Button variant="primary">Primary Button</Button>
+                <Button variant="success">Success Button</Button>
+                <Button variant="danger">Danger Button</Button>
+            </div>
+        );
+    }
+
+    export default App;
+
+Example 2: Navbar
+    import React from "react";
+    import { Navbar, Container, Nav } from "react-bootstrap";
+    import "bootstrap/dist/css/bootstrap.min.css";
+
+    function App() {
+        return (
+            <Navbar bg="dark" variant="dark" expand="lg">
+                <Container>
+                    <Navbar.Brand href="#home">Muhammad Umar</Navbar.Brand>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="me-auto">
+                            <Nav.Link href="#home">Home</Nav.Link>
+                            <Nav.Link href="#about">About</Nav.Link>
+                            <Nav.Link href="#skills">Skills</Nav.Link>
+                            <Nav.Link href="#contact">ContactMe</Nav.Link>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
+        );
+    }
+
+    export default App;
+
+Example 3: Grid System (Container, Row, Col)
+    import React from "react";
+    import { Container, Row, Col } from "react-bootstrap";
+    import "bootstrap/dist/css/bootstrap.min.css";
+
+    function App() {
+        return (
+            <Container>
+                <Row>
+                    <Col sm={4} style={{ background: "lightblue" }}>Column 1</Col>
+                    <Col sm={4} style={{ background: "lightgreen" }}>Column 2</Col>
+                    <Col sm={4} style={{ background: "lightcoral" }}>Column 3</Col>
+                </Row>
+            </Container>
+        );
+    }
+
+    export default App;
+
+Key Notes:
+    - Always import "bootstrap/dist/css/bootstrap.min.css" once (usually in index.js or App.js).
+    - Components replace class names, e.g., Button instead of <button class="btn btn-primary">.
+    - You can still apply custom CSS if needed.
+
+Official Docs: https://react-bootstrap.github.io/
