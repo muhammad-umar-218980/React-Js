@@ -1,0 +1,251 @@
+📘 React Props 
+
+What Are Props?
+    •   Props (short for "properties") are inputs passed into React components.
+    •   They are read-only and help configure how a component behaves or renders.
+    •   Think of props as function parameters for components.
+
+Why Use Props?
+    •   Pass data from parent to child (one-way, top → down).
+    •   Make components reusable by varying their inputs.
+    •   Keep components stateless/pure where possible.
+
+Core Rules / Key Points
+    •   Data flows one-way (parent → child).
+    •   Props are immutable inside the child (do not modify them).
+    •   If you need to change something based on user interaction, lift state up to the parent and pass new props down.
+    •   Props can be any JS value: strings, numbers, booleans, objects, arrays, functions, JSX, or children.
+
+Basic Usage (Passing and Reading Props)
+
+    // Parent → Child (primitive values)
+    function Header({ title }) {
+        return <h1>{title}</h1>;
+    }
+
+    function App() {
+        return <Header title="My App" />;
+    }
+
+    // Without destructuring
+    function Header(props) {
+        return <h1>{props.title}</h1>;
+    }
+
+Passing Objects and Arrays
+
+    // Parent: pass object and array
+    function App() {
+        const user = { name: "Muhammad Umar", role: "Student" };
+        const skills = ["React", "DSA", "JS"];
+        return <Profile user={user} skills={skills} />;
+    }
+
+    // Child: read object/array props
+    function Profile({ user, skills }) {
+        return (
+            <div>
+                <p>Name: {user.name}</p>
+                <p>Role: {user.role}</p>
+                <ul>
+                    {skills.map((s, i) => <li key={i}>{s}</li>)}
+                </ul>
+            </div>
+        );
+    }
+
+Passing Functions via Props (Callbacks)
+
+    // Parent holds state and passes callbacks to child
+    import { useState } from "react";
+
+    function App() {
+        const [count, setCount] = useState(0);
+        function handleIncrement() { setCount(count + 1); }
+        function handleReset() { setCount(0); }
+        return (
+            <Counter value={count} onIncrement={handleIncrement} onReset={handleReset} />
+        );
+    }
+
+    // Child calls the functions from props
+    function Counter({ value, onIncrement, onReset }) {
+        return (
+            <div>
+                <h2>Count: {value}</h2>
+                <button onClick={onIncrement}>Increment</button>
+                <button onClick={onReset}>Reset</button>
+            </div>
+        );
+    }
+
+Conditional Rendering with Props
+
+    function Alert({ type, message }) {
+        // Choose a CSS class based on prop
+        const cls = type === "error" ? "alert-error" : "alert-info";
+        return message ? <div className={cls}>{message}</div> : null;
+    }
+
+    function App() {
+        return (
+            <>
+                <Alert type="error" message="Something went wrong" />
+                <Alert type="info" message="" /> {/* Renders nothing */}
+            </>
+        );
+    }
+
+The special children Prop
+
+    // Any nested JSX inside a component invocation becomes its children prop
+    function Card({ title, children }) {
+        return (
+            <div className="card">
+                <h3>{title}</h3>
+                <div className="card-body">{children}</div>
+            </div>
+        );
+    }
+
+    function App() {
+        return (
+            <Card title="Welcome">
+                <p>This content is passed via the children prop.</p>
+                <button>Ok</button>
+            </Card>
+        );
+    }
+
+Default Props (with default parameters)
+
+    // Use default parameter values for functional components
+    function Button({ label = "Click", variant = "primary" }) {
+        const cls = variant === "primary" ? "btn-primary" : "btn-secondary";
+        return <button className={cls}>{label}</button>;
+    }
+
+    function App() {
+        return (
+            <>
+                <Button /> {/* label defaults to "Click" */}
+                <Button label="Save" /> {/* overrides label */}
+                <Button variant="secondary" />
+            </>
+        );
+    }
+
+Derived/Computed Props
+
+    // Parent computes values and passes down the result, keeping child simple
+    function App() {
+        const items = [10, 20, 30, 40];
+        const total = items.reduce((a, b) => a + b, 0);
+        const average = total / items.length;
+        return <Stats total={total} average={average} />;
+    }
+
+    function Stats({ total, average }) {
+        return (
+            <div>
+                <p>Total: {total}</p>
+                <p>Average: {average.toFixed(2)}</p>
+            </div>
+        );
+    }
+
+Avoid Mutating Props (Anti-pattern)
+
+    // Bad: mutating props inside child
+    function Timer({ start }) {
+        // start++ // ❌ do not mutate props
+        return <p>Start: {start}</p>;
+    }
+
+    // Good: compute new values without mutation
+    function Timer({ start }) {
+        const next = start + 1;
+        return <p>Next: {next}</p>;
+    }
+
+Spread Props (Use Carefully)
+
+    // Useful for forwarding many props, but be explicit with critical ones
+    function Input(props) {
+        return <input {...props} />;
+    }
+
+    function App() {
+        return (
+            <Input type="text" placeholder="Your name" maxLength={40} aria-label="name" />
+        );
+    }
+
+Reusable Component Example (Putting it Together)
+
+    import { useState } from "react";
+
+    function TextField({ label, value, onChange, help, required = false }) {
+        return (
+            <label style={{ display: "block", marginBottom: 12 }}>
+                <span>{label}{required ? " *" : ""}</span>
+                <input
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}
+                    aria-label={label}
+                />
+                {help && <small style={{ display: "block" }}>{help}</small>}
+            </label>
+        );
+    }
+
+    function App() {
+        const [name, setName] = useState("");
+        return (
+            <form>
+                <TextField label="Name" value={name} onChange={setName} help="Enter your full name" required />
+                <p>Hello, {name || "Guest"}!</p>
+            </form>
+        );
+    }
+
+Passing Data via Props (Patterns)
+    •   Parent → Child (data): pass primitives/objects/arrays to display.
+    •   Parent → Child (behavior): pass functions so child can notify parent of events.
+    •   Parent computes derived data to minimize child logic.
+    •   Use children prop for flexible content composition.
+    •   For optional props, provide sensible defaults in the child.
+
+Common Pitfalls
+    •   Forgetting keys when mapping arrays (use a stable unique key, e.g., item.id).
+    •   Trying to modify props inside the child (instead, ask parent via callback).
+    •   Overusing spread props can hide what is being passed; prefer explicit props for readability.
+    •   Passing new object/array literals every render can cause unnecessary re-renders in memoized children; consider memoization or move literals outside render when needed.
+
+Optional: Runtime Type Checking with PropTypes (installation required)
+
+    // Install (only if you want prop type checking at runtime)
+    // npm i prop-types
+
+    import PropTypes from "prop-types";
+
+    function Avatar({ src, alt, size = 40 }) {
+        return <img src={src} alt={alt} width={size} height={size} />;
+    }
+
+    Avatar.propTypes = {
+        src: PropTypes.string.isRequired,
+        alt: PropTypes.string.isRequired,
+        size: PropTypes.number
+    };
+
+    function App() {
+        return <Avatar src="/user.png" alt="User avatar" size={64} />;
+    }
+
+Quick Reference
+    •   Props = read-only inputs to components.
+    •   One-way data flow from parent to child.
+    •   Pass data, behavior (callbacks), and content (children).
+    •   Prefer default parameters for defaults.
+    •   Keep children pure: compute/own state in parent, render via props in child.
