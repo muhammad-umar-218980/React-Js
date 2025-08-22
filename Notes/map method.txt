@@ -1,0 +1,86 @@
+React - map() Method
+--------------------
+
+1. What is map()?
+-----------------
+- The map() method is a built-in JavaScript array method.
+- It creates a new array by applying a function to each element of the original array.
+- In React, map() is commonly used to render lists of elements dynamically.
+
+--------------------
+
+2. Why use map() in React?
+--------------------------
+- To render multiple JSX elements from array data.
+- Avoids repetitive code (no need to write <li> manually for each item).
+- Ensures a scalable and dynamic UI.
+- Works perfectly with props and state (re-renders automatically on data change).
+
+--------------------
+
+3. Syntax in JavaScript:
+------------------------
+array.map((element, index) => {
+   // return transformed element
+});
+
+Example:
+--------
+const numbers = [1, 2, 3, 4];
+const doubled = numbers.map((n) => n * 2);
+console.log(doubled);  // [2, 4, 6, 8]
+
+--------------------
+
+4. Usage in React (with JSX):
+------------------------------
+- Convert an array into JSX elements.
+- Example: Rendering list of items.
+
+Code Example:
+-------------
+function App() {
+  const items = [
+    { id: 1, name: "Apple" },
+    { id: 2, name: "Banana" },
+    { id: 3, name: "Cherry" }
+  ];
+
+  return (
+    <div>
+      <h2>Fruit List</h2>
+      <ul>
+        {items.map((item) => (
+          <li key={item.id}>{item.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+--------------------
+
+5. Key Prop Importance:
+------------------------
+- React needs a "key" to identify elements uniquely.
+- Helps React optimize re-renders when data changes.
+- Each child in a list must have a unique "key".
+
+Bad Example ❌:
+--------------
+<ul>
+  {items.map((item) => <li>{item.name}</li>)}
+</ul>
+
+Good Example ✅:
+---------------
+<ul>
+  {items.map((item) => <li key={item.id}>{item.name}</li>)}
+</ul>
+
+--------------------
+
+6. Notes:
+---------
+- "key" should be unique and stable (avoid using index unless necessary).
+- map() must always return JSX inside curly braces `{ }`.
