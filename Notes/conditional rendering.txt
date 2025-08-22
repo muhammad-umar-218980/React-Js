@@ -1,0 +1,86 @@
+----- Conditional Rendering -----
+
+Definition:
+• Conditional Rendering means showing (or hiding) UI elements based on certain conditions.
+• It allows React apps to update the UI dynamically depending on state or props.
+• Makes applications interactive and user-friendly.
+
+--------------------------------
+Methods of Conditional Rendering
+--------------------------------
+
+1. If-Else Statements
+• Use normal if-else inside a function/component to decide what to return.
+• Good for rendering completely different JSX blocks.
+
+Example:
+function Greeting({ isLoggedIn }) {
+    if (isLoggedIn) {
+        return <h1>Welcome back, User!</h1>;
+    } else {
+        return <h1>Please log in.</h1>;
+    }
+}
+
+-------------------------------
+
+2. Ternary Operator ( ? : )
+• Shorter way to decide between two options.
+• Ideal for inline JSX conditions.
+
+Example:
+function Greeting({ isLoggedIn }) {
+    return (
+        <div>
+            {isLoggedIn ? <h1>Welcome back!</h1> : <h1>Please log in.</h1>}
+        </div>
+    );
+}
+
+-------------------------------
+
+3. Logical AND (&&) Operator
+• Renders content only if the condition is true.
+• Useful for optional elements.
+
+Example:
+function Notification({ hasMessage }) {
+    return (
+        <div>
+            {hasMessage && <p>You have a new message!</p>}
+        </div>
+    );
+}
+
+-------------------------------
+Benefits of Conditional Rendering
+-------------------------------
+• Enhances user experience by showing only relevant content.
+• Reduces unnecessary rendering, improving performance.
+• Makes applications more dynamic, responsive, and interactive.
+
+--------------------------------
+Which is Better? (If-Else vs Ternary vs &&)
+--------------------------------
+
+1. If-Else:
+• Best when you need to render large, complex JSX blocks.
+• Makes code more readable when conditions are long or nested.
+• Example use case: Entire page layout changes based on login.
+
+2. Ternary (? :):
+• Best for short conditions with two outcomes.
+• Good for inline rendering inside JSX.
+• Example use case: Show "Login" button or "Logout" button.
+
+3. Logical AND (&&):
+• Best for optional UI elements (render only if true).
+• Cleaner than ternary when you don’t need an "else" option.
+• Example use case: Show notifications/messages only when they exist.
+
+--------------------------------
+Rule of Thumb:
+• Use "if-else" for big UI differences.
+• Use "ternary" for small inline conditions.
+• Use "&&" when only rendering on true condition.
+--------------------------------
