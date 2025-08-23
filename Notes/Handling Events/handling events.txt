@@ -1,0 +1,78 @@
+-----------------------------------------
+📘 Handling Events in React
+-----------------------------------------
+
+1. React events use camelCase, e.g., onClick.
+   - Unlike HTML where event names are lowercase (onclick), React uses camelCase.
+   Example:
+   -----------------------------------------
+   <button onClick={handleClick}>Click Me</button>
+   -----------------------------------------
+
+2. Uses synthetic events, not direct browser events.
+   - React wraps native browser events into SyntheticEvent for cross-browser compatibility.
+   Example:
+   -----------------------------------------
+   function handleClick(event) {
+     console.log("Button clicked!");
+     console.log("Synthetic Event:", event);
+   }
+   -----------------------------------------
+
+3. Event handlers can be functions or arrow functions.
+   - You can pass a reference to a function or use an inline arrow function.
+   Example:
+   -----------------------------------------
+   function App() {
+     function handleClick() {
+       alert("Button clicked!");
+     }
+
+     return (
+       <div>
+         <button onClick={handleClick}>Click Me</button>
+         <button onClick={() => alert("Clicked Inline!")}>Inline Click</button>
+       </div>
+     );
+   }
+   -----------------------------------------
+
+4. Use onChange for controlled form inputs.
+   - React uses onChange to handle input updates instead of onInput.
+   Example:
+   -----------------------------------------
+   function Form() {
+     const [value, setValue] = React.useState("");
+
+     function handleChange(event) {
+       setValue(event.target.value);
+     }
+
+     return (
+       <div>
+         <input type="text" value={value} onChange={handleChange} />
+         <p>Current Value: {value}</p>
+       </div>
+     );
+   }
+   -----------------------------------------
+
+5. Avoid inline arrow functions in JSX for performance.
+   - Inline functions create a new function on each render, which may affect performance in large apps.
+   - Instead, define functions outside of JSX when possible.
+   Example:
+   -----------------------------------------
+   // ❌ Bad (creates new function on each render)
+   <button onClick={() => doSomething()}>Click</button>
+
+   // ✅ Good (reuses same function)
+   <button onClick={doSomething}>Click</button>
+   -----------------------------------------
+
+-----------------------------------------
+✅ Summary:
+- React event system uses camelCase and SyntheticEvent.
+- Event handlers can be normal or arrow functions.
+- onChange is essential for controlled inputs.
+- Avoid inline arrow functions for better performance.
+-----------------------------------------
