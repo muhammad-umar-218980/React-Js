@@ -1,0 +1,75 @@
+-------------------------------------------------
+React Hooks - Notes
+-------------------------------------------------
+
+1. What are Hooks?
+   - Hooks are special functions in React that let you use state and other React features 
+     in functional components.
+   - Introduced in React 16.8 to remove dependency on class components.
+   - Allow functional components to have state, lifecycle, and side effects.
+
+2. Why Hooks?
+   - Simplify code by avoiding classes.
+   - Promote code reusability with custom hooks.
+   - Make components cleaner and easier to test.
+   - Encourage separation of logic from UI.
+   - Provide a consistent way to manage state and side effects.
+
+3. Rules of Hooks
+   - Call hooks only at the top level (not inside loops, conditions, or nested functions).
+   - Only call hooks from React functions (functional components or custom hooks).
+
+-------------------------------------------------
+Commonly Used Hooks (Name + Purpose)
+-------------------------------------------------
+
+1. useState      -> Manage component state.
+2. useEffect     -> Handle side effects (data fetching, subscriptions, DOM updates).
+3. useContext    -> Access context values without prop drilling.
+4. useRef        -> Access and persist values between renders (DOM refs).
+5. useReducer    -> Alternative to useState for complex state logic.
+6. useMemo       -> Optimize performance by memoizing values.
+7. useCallback   -> Optimize performance by memoizing functions.
+8. useLayoutEffect -> Similar to useEffect but fires synchronously after DOM mutations.
+9. useImperativeHandle -> Customize ref handling for components.
+10. useTransition -> Manage state transitions without blocking UI.
+11. useDeferredValue -> Defer rendering of non-urgent parts for smoother UI.
+12. useId        -> Generate unique IDs for accessibility and forms.
+13. useDebugValue -> Show debug information in React DevTools.
+
+-------------------------------------------------
+Key Benefits
+-------------------------------------------------
+- Reduce boilerplate code compared to classes.
+- Encourage functional, declarative style.
+- Improve reusability with custom hooks.
+- Make code more readable and maintainable.
+- Enable modern React patterns for better performance.
+-------------------------------------------------
+
+-------------------------------------------------
+Custom Hooks
+-------------------------------------------------
+1. What are Custom Hooks?
+   - Custom Hooks are user-defined functions that reuse hook logic across components.
+   - They start with "use" (e.g., useFetch, useForm, useLocalStorage).
+   - They allow separation of logic from UI for better reusability.
+
+2. Why use Custom Hooks?
+   - Avoid code duplication by extracting repeated logic.
+   - Share stateful logic between multiple components.
+   - Keep components smaller, focused, and easier to maintain.
+
+3. Examples of Custom Hooks:
+   - useFetch(url) -> Handles data fetching logic.
+   - useLocalStorage(key, initialValue) -> Syncs state with localStorage.
+   - useForm(initialValues) -> Simplifies form handling and validation.
+   - useWindowSize() -> Tracks browser window dimensions.
+   - usePrevious(value) -> Stores the previous value of a state/prop.
+
+4. Best Practices:
+   - Always prefix with "use".
+   - Keep logic focused on one purpose.
+   - Reuse existing React hooks inside custom hooks.
+   - Make them generic for maximum reusability.
+-------------------------------------------------
