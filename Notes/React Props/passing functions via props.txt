@@ -1,0 +1,117 @@
+---------------------------------
+📘 Notes: Passing Functions via Props
+---------------------------------
+
+1. Pass dynamic behaviour between components.  
+   → Instead of just passing static data, you can pass functions as props.  
+
+2. Enables upward communication from child to parent.  
+   → A child can trigger a function that is defined in the parent.  
+
+3. Commonly used for event handling.  
+   → For example: when a button is clicked in the child component.  
+
+4. Parent defines a function, child invokes it.  
+   → This allows parent state or logic to be modified by child actions.  
+
+5. Enhances component interactivity.  
+   → Makes components reusable and keeps logic centralized in the parent.  
+
+---------------------------------
+💻 Code Example 1: Passing Function as Prop
+---------------------------------
+
+// Parent Component
+import React, { useState } from "react";
+import Child from "./Child";
+
+function Parent() {
+  const [count, setCount] = useState(0);
+
+  function increaseCount() {
+    setCount(count + 1);
+  }
+
+  return (
+    <div>
+      <h2>Count: {count}</h2>
+      <Child onIncrease={increaseCount} />
+    </div>
+  );
+}
+
+export default Parent;
+
+
+// Child Component
+import React from "react";
+
+function Child({ onIncrease }) {
+  return (
+    <button onClick={onIncrease}>
+      Increase Count
+    </button>
+  );
+}
+
+export default Child;
+
+✔ Explanation:
+
+Parent defines a function increaseCount.
+
+It passes this function as a prop onIncrease to Child.
+
+When Child’s button is clicked, it calls onIncrease, updating the parent’s state.
+
+💻 Code Example 2: Passing Functions with Parameters
+
+// Parent Component
+import React, { useState } from "react";
+import Child from "./Child";
+
+function Parent() {
+  const [message, setMessage] = useState("");
+
+  function showMessage(text) {
+    setMessage(text);
+  }
+
+  return (
+    <div>
+      <h2>Message: {message}</h2>
+      <Child onSend={showMessage} />
+    </div>
+  );
+}
+
+export default Parent;
+
+
+// Child Component
+import React from "react";
+
+function Child({ onSend }) {
+  return (
+    <div>
+      <button onClick={() => onSend("Hello from Child!")}>
+        Send Message
+      </button>
+    </div>
+  );
+}
+
+export default Child;
+✔ Explanation:
+
+The Child can call onSend with a parameter.
+
+The parent’s state updates with the value provided by the child.
+
+📌 Notes:
+
+Use this pattern when children need to communicate back to the parent.
+
+Functions can be passed like any other value (string, number, object).
+
+Helps maintain a unidirectional data flow in React.
