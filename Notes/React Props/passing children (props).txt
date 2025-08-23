@@ -1,0 +1,102 @@
+📘 React Props – Passing Children
+🔹 What is children in React?
+
+children is a special prop that React automatically provides.
+
+It is used to pass nested elements (JSX, text, or components) between a component’s opening and closing tags.
+
+This allows for flexible and reusable component designs.
+
+It is commonly used in layout or container components.
+
+Accessed using props.children (or destructuring: {children}).
+
+children can hold any content – strings, numbers, JSX, or even other components.
+
+Greatly enhances component composability and reusability.
+
+🔹 Example 1 – Basic Usage of props.children
+// Parent Component
+function App() {
+  return (
+    <Container>
+      <h1>Hello World</h1>
+      <p>This is inside the Container!</p>
+    </Container>
+  );
+}
+
+// Child Component
+function Container(props) {
+  return (
+    <div className="box">
+      {props.children} {/* renders nested content */}
+    </div>
+  );
+}
+
+
+📌 Output:
+
+Hello World
+This is inside the Container!
+
+🔹 Example 2 – Destructuring children
+function Card({ children }) {
+  return <div className="card">{children}</div>;
+}
+
+function App() {
+  return (
+    <Card>
+      <h2>React Props - Children</h2>
+      <button>Click Me</button>
+    </Card>
+  );
+}
+
+
+📌 Output:
+
+React Props - Children
+[Click Me Button]
+
+🔹 Example 3 – Passing Multiple JSX Elements
+function Wrapper({ children }) {
+  return <section className="wrapper">{children}</section>;
+}
+
+function App() {
+  return (
+    <Wrapper>
+      <header>Header Content</header>
+      <main>Main Content</main>
+      <footer>Footer Content</footer>
+    </Wrapper>
+  );
+}
+
+
+📌 Output:
+
+Header Content
+Main Content
+Footer Content
+
+🔹 When to Use props.children?
+
+When you want flexible layouts (cards, containers, modals, wrappers).
+
+When a component should wrap any type of content.
+
+When creating reusable UI components that can hold varying child elements.
+
+✅ Summary:
+
+children is a special React prop for passing nested content.
+
+Helps in building flexible, reusable, and composable components.
+
+Can accept any type of data: string, number, JSX, or another component.
+
+Accessed via props.children or destructuring { children }.
