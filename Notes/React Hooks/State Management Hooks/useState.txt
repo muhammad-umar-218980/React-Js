@@ -1,0 +1,199 @@
+----- useState() and Managing State in React -----
+
+1. State represents data that changes over time.
+
+   * In React, "state" is data that can change while the app is running.
+   * Example: A counter, input values, toggles, or fetched data.
+   * Whenever state updates, React re-renders the component to show the latest UI.
+
+2. State is local and private to the component.
+
+   * Each component manages its own state.
+   * Other components cannot directly modify it.
+   * They can only receive state via props if the parent decides to share it.
+
+3. State changes cause the component to re-render.
+
+   * React's virtual DOM compares old vs new state values.
+   * If a change is detected, only the affected parts of the UI re-render.
+   * This ensures efficiency.
+
+4. For functional components, use the useState hook.
+
+   * useState is a built-in hook that lets you add state to a function component.
+   * It returns an array with:
+     (a) the current state value
+     (b) a function to update it.
+
+5. React Functions that start with the word "use" are called hooks.
+
+   * Examples: useState, useEffect, useContext.
+   * They are special functions to manage state, lifecycle, and more in functional components.
+
+6. Hooks should only be used inside components.
+
+   * Rules of Hooks:
+
+     * Only call hooks at the top level of your React function.
+     * Never call hooks inside loops, conditions, or nested functions.
+   * They must run in the same order on every render.
+
+7. Parent components can pass state down to children via props.
+
+   * State is defined in the parent.
+   * Passed down to child components as props.
+   * Child components cannot modify parent’s state directly.
+
+8. Lifting state up: share state between components by moving it to their closest common ancestor.
+
+   * If two sibling components need the same state:
+
+     * Move the state to the parent component.
+     * Pass it down to both children as props.
+   * This is called "lifting state up".
+
+---
+
+📌 Code Examples:
+
+## Example 1: Basic useState in Functional Component
+
+import React, { useState } from "react";
+
+function Counter() {
+    const [count, setCount] = useState(0);
+
+    const increase = () => {
+        setCount(count + 1);
+    };
+
+    return (
+        <div>
+            <h2>Count: {count}</h2>
+            <button onClick={increase}>Increase</button>
+        </div>
+    );
+}
+
+export default Counter;
+
+
+Explanation:
+
+* "count" is the state variable.
+* "setCount" is the function to update count.
+* When button is clicked, "count" increases → component re-renders.
+
+## Example 2: Passing State to Child via Props
+
+import React, { useState } from "react";
+
+function Parent() {
+    const [name, setName] = useState("Umar");
+
+    return (
+        <div>
+            <h1>Parent Component</h1>
+            <Child name={name} />
+        </div>
+    );
+}
+
+function Child({ name }) {
+    return <h2>Hello, {name}</h2>;
+}
+
+export default Parent;
+
+
+Explanation:
+
+* Parent holds the state "name".
+* Passed to Child as prop.
+* Child can display it, but cannot change it.
+
+## Example 3: Lifting State Up
+
+import React, { useState } from "react";
+
+function Parent() {
+    const [message, setMessage] = useState("");
+
+    return (
+        <div>
+            <h1>Parent Component</h1>
+            <InputComponent setMessage={setMessage} />
+            <DisplayComponent message={message} />
+        </div>
+    );
+}
+
+function InputComponent({ setMessage }) {
+    return (
+        <input
+            type="text"
+            placeholder="Type something..."
+            onChange={(e) => setMessage(e.target.value)}
+        />
+    );
+}
+
+function DisplayComponent({ message }) {
+    return <h2>You typed: {message}</h2>;
+}
+
+export default Parent;
+
+
+Explanation:
+
+* State "message" is in Parent.
+* Child InputComponent updates it using setMessage.
+* DisplayComponent shows the updated message.
+* State is lifted up to Parent so both children can use it.
+
+---
+
+## 📌 Working of useState Under the Hood
+
+* React maintains an internal array of state values for each component.
+* Each call to useState corresponds to an index in this array.
+* The first value returned by useState is the current state at that index.
+* The second value is a setter function that updates the state in the array and triggers a re-render.
+* On re-render, React uses the same index order to retrieve the correct state for each useState call.
+* This is why hooks must always be called in the same order inside a component.
+
+Simplest pseudo-code for useState:
+
+let state = [];
+let i = 0;
+
+function useState(initial) {
+    const idx = i;
+    if (state[idx] === undefined) state[idx] = initial;
+
+    function setState(val) {
+        state[idx] = val;
+        render(); // re-render component
+    }
+
+    i++;
+    return [state[idx], setState];
+}
+
+
+* `state` stores all state variables of the component.
+* `i` tracks which state slot to use.
+* `setState` updates the value and triggers a re-render.
+* Each useState call retrieves its state from the correct index in the array.
+
+---
+
+✅ Summary:
+
+* useState adds state to functional components.
+* State is local but can be shared with children via props.
+* State updates trigger re-renders.
+* Hooks follow special rules (only inside components).
+* Lifting state up helps share data across multiple components.
+* Under the hood, useState uses an internal array and index to track multiple state variables.
