@@ -1,0 +1,62 @@
+States vs Props in React
+
+State:
+
+- Local and mutable data within a component.
+- Initialized within the component.
+- Can change over time.
+- Causes re-render when updated.
+- Managed using useState in functional components.
+
+Props:
+
+- Passed into a component from its parent.
+- Read-only (immutable) within the receiving component.
+- Allow parent-to-child component communication.
+- Changes in props can also cause a re-render.
+
+Key Differences:
+
+- Ownership: State belongs to the component itself, props come from the parent.
+- Mutability: State can be changed, props are read-only.
+- Initialization: State is initialized inside the component, props are passed externally.
+- Usage: State is used for data that changes over time; props are used to pass data or callbacks to child components.
+
+Example:
+
+
+import React, { useState } from "react";
+
+// Child Component receiving props
+function Child({ message }) {
+  return <h2>Message from Parent: {message}</h2>;
+}
+
+// Parent Component with state
+function Parent() {
+  const [text, setText] = useState("Hello from Parent!");
+
+  return (
+    <div>
+      <Child message={text} />
+      <button onClick={() => setText("Updated Message!")}>Update</button>
+    </div>
+  );
+}
+
+export default Parent;
+
+
+Explanation:
+
+- `text` is state in `Parent`.
+- `message` is a prop in `Child`, passed from `Parent`.
+- Updating state in `Parent` (setText) causes re-render in both `Parent` and `Child`.
+- `Child` cannot directly modify its prop (`message`).
+
+Summary:
+
+- State: local, mutable, owned by component, triggers re-renders.
+- Props: external, read-only, passed from parent, can also trigger re-renders.
+
+Understanding the difference helps structure React components effectively.
