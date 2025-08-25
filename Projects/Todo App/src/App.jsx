@@ -23,11 +23,16 @@ function App() {
 
   }
 
+  const deleteItem = function(itemName){
+    const newItems = todoItems.filter(item => item.itemName !== itemName);
+    setTodoItems(newItems);
+  }
+
   return (
     <>
       <TodoHeader />
-      <AddTodo onNewItem={addNewItem}/>
-      <TodoItems todos={todoItems} />
+      <AddTodo onNewItem={addNewItem} />
+      <TodoItems todos={todoItems} onDeleteItem={deleteItem} />
     </>
   );
 }
