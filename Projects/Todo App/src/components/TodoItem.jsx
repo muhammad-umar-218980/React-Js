@@ -1,21 +1,15 @@
-import { FiTrash2, FiEdit } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
 
 function TodoItem({ itemName, dueDate }) {
 	return (
 		<div className="container my-4">
 			<div className="row g-3 align-items-center bg-light p-4 rounded shadow-sm">
-				<div className="col-md-5">
+				<div className="col-md-6">
 					<p className="form-control-static">{itemName}</p>
 				</div>
 
-				<div className="col-md-3">
+				<div className="col-md-4">
 					<p className="form-control-static">{dueDate}</p>
-				</div>
-
-				<div className="col-md-2 d-grid">
-					<button className="btn btn-warning d-flex align-items-center justify-content-center">
-						<FiEdit className="me-2" /> Edit
-					</button>
 				</div>
 
 				<div className="col-md-2 d-grid">
