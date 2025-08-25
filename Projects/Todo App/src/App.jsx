@@ -1,14 +1,21 @@
 import TodoHeader from "./components/TodoHeader"
 import AddTodo from "./components/AddTodo"
-import TodoItem from "./components/TodoItem";
+import TodoItems from "./components/TodoItems";
 
 function App() {
+
+  let todos = [
+    { itemName: "Learn React", dueDate: "25-08-2025" },
+    { itemName: "Have Coffee", dueDate: "28-08-2025" },
+    { itemName: "Write Code", dueDate: "30-08-2025" },
+    { itemName: "Have Biryani", dueDate: "31-08-2025" }
+  ];
+
   return (
     <>
       <TodoHeader />
       <AddTodo />
-      <TodoItem itemName = "Learn React" dueDate = "25-08-2025" />
-      <TodoItem itemName = "Have Coffee" dueDate = "28-08-2025" />
+      <TodoItems todos={todos} />
     </>
   );
 }
