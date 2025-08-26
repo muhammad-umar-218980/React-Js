@@ -5,7 +5,7 @@ const ButtonsContainer = ({ onButtonClicked }) => {
 
   const handleButtonClick = (buttonName,event) => {
     onButtonClicked(buttonName);
-    console.log(event);
+    // console.log(event);
   };
 
   return (
