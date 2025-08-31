@@ -1,0 +1,9 @@
+
+.calculator-display input {
+  background-color: #f3f3f3;
+  border: none;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+  padding: 20px;
+  font-size: 2.5rem;
+  color: #333;
+}

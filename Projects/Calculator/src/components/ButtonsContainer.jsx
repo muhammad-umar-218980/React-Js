@@ -1,25 +1,35 @@
+import "./ButtonsContainer.css";
+
 const ButtonsContainer = ({ onButtonClicked }) => {
   const buttonNames = [
-    'C', '1', '2', '+', '3', '4', '-', '5', '6', '*', '7', '8', '/', '=', '9', '0', '.'
+    'C', '(', ')', '/',
+    '7', '8', '9', '*',
+    '4', '5', '6', '-',
+    '1', '2', '3', '+',
+    '0', '.', '='
   ];
 
-  const handleButtonClick = (buttonName,event) => {
-    onButtonClicked(buttonName);
-    // console.log(event);
+  const getButtonClass = (buttonName) => {
+    if (['C', '(', ')', '/'].includes(buttonName)) {
+      return 'btn-info';
+    }
+    if (['*', '-', '+', '='].includes(buttonName)) {
+      return 'btn-warning';
+    }
+    if (buttonName === 'C') {
+      return 'btn-danger';
+    }
+    return 'btn-light';
   };
 
   return (
-    <div className="container">
-      <div className="row justify-content-center">
-        <div className="col-md-8">
-          <div className="d-grid gap-2" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
-            {buttonNames.map((buttonName) => (
-              <button key={buttonName} className="btn btn-light border fs-4" onClick={(event) => handleButtonClick(buttonName,event)}>
-                {buttonName}
-              </button>
-            ))}
-          </div>
-        </div>
+    <div className="calculator-buttons">
+      <div className="d-grid gap-3" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+        {buttonNames.map((buttonName) => (
+          <button key={buttonName} className={`btn ${getButtonClass(buttonName)} fs-4`} onClick={() => onButtonClicked(buttonName)}>
+            {buttonName}
+          </button>
+        ))}
       </div>
     </div>
   );
