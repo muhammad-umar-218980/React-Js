@@ -13,7 +13,7 @@ const ButtonsContainer = ({ onButtonClicked }) => {
     if (['C', '(', ')', '/'].includes(buttonName)) {
       return 'btn-info';
     }
-    if (['*', '-', '+', '='].includes(buttonName)) {
+        if ([ '*', '-', '+'].includes(buttonName)) {
       return 'btn-warning';
     }
     if (buttonName === 'C') {
@@ -26,7 +26,7 @@ const ButtonsContainer = ({ onButtonClicked }) => {
     <div className="calculator-buttons">
       <div className="d-grid gap-3" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
         {buttonNames.map((buttonName) => (
-          <button key={buttonName} className={`btn ${getButtonClass(buttonName)} fs-4`} onClick={() => onButtonClicked(buttonName)}>
+          <button key={buttonName} className={`btn ${getButtonClass(buttonName)} fs-4 ${buttonName === '=' ? 'equal-btn' : ''}`} onClick={() => onButtonClicked(buttonName)}>
             {buttonName}
           </button>
         ))}

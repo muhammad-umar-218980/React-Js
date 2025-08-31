@@ -1,4 +1,3 @@
-
 .calculator-buttons .btn {
   border-radius: 15px;
   font-size: 1.5rem;
@@ -31,4 +30,14 @@
 .calculator-buttons .btn-danger {
   background-color: #d9534f;
   color: white;
+}
+
+.calculator-buttons .equal-btn {
+  grid-column: span 2;
+  background-color: #28a745;
+  color: white;
+}
+
+.calculator-buttons .equal-btn:hover {
+  background-color: rgba(33, 136, 55, 0.861);
 }
