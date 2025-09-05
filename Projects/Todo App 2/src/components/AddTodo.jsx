@@ -8,18 +8,18 @@ function AddTodo({ onNewItem }) {
 
 	function onTodoNameChange(event) {
 		let value = event.target.value;
-		console.log(value);
 		setTodoName(value)
 	}
 
 	function onTodoDueDateChange(event) {
 		let value = event.target.value;
-		console.log(value);
 		setTodoDueDate(value)
 	}
 
 
-	const AddButtonClicked = () => {
+	const AddButtonClicked = (event) => {
+		event.preventDefault();
+		console.log(event);
 		if (TodoName && TodoDueDate) {
 			onNewItem(TodoName, TodoDueDate)
 			setTodoName("");
@@ -31,7 +31,7 @@ function AddTodo({ onNewItem }) {
 
 	return (
 		<div className="container my-4">
-			<div className="row g-3 align-items-center bg-light p-4 rounded shadow-sm">
+			<form className="row g-3 align-items-center bg-light p-4 rounded shadow-sm" onSubmit={AddButtonClicked}>
 
 				<div className="col-md-6">
 					<input
@@ -53,12 +53,12 @@ function AddTodo({ onNewItem }) {
 				</div>
 
 				<div className="col-md-2 d-grid">
-					<button className="btn btn-success d-flex align-items-center justify-content-center" onClick={AddButtonClicked}>
+					<button className="btn btn-success d-flex align-items-center justify-content-center" >
 						<FiPlus className="me-2" /> Add
 					</button>
 				</div>
 
-			</div>
+			</form>
 		</div>
 	);
 };
