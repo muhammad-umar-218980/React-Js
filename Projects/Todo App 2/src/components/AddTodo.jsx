@@ -1,29 +1,44 @@
 import { FiPlus } from "react-icons/fi";
-import { useState } from "react";
+// import { useState } from "react";
+import {useRef} from "react";
 
 function AddTodo({ onNewItem }) {
 
-	const [TodoName, setTodoName] = useState("");
-	const [TodoDueDate, setTodoDueDate] = useState("");
+	// const [TodoName, setTodoName] = useState("");
+	// const [TodoDueDate, setTodoDueDate] = useState("");
 
-	function onTodoNameChange(event) {
-		let value = event.target.value;
-		setTodoName(value)
-	}
+	// function onTodoNameChange(event) {
+	// 	let value = event.target.value;
+	// 	setTodoName(value)
+	// }
 
-	function onTodoDueDateChange(event) {
-		let value = event.target.value;
-		setTodoDueDate(value)
-	}
+	// function onTodoDueDateChange(event) {
+	// 	let value = event.target.value;
+	// 	setTodoDueDate(value)
+	// }
+
+	const TodoNameRef = useRef();
+	const TodoDueDateRef = useRef();
+
 
 
 	const AddButtonClicked = (event) => {
 		event.preventDefault();
 		console.log(event);
-		if (TodoName && TodoDueDate) {
-			onNewItem(TodoName, TodoDueDate)
-			setTodoName("");
-			setTodoDueDate("");
+		// if (TodoName && TodoDueDate) {
+		// 	onNewItem(TodoName, TodoDueDate)
+		// 	setTodoName("");
+		// 	setTodoDueDate("");
+		// } else {
+		// 	alert("Please enter both a todo name and a due date.");
+		// }
+		const todoName = TodoNameRef.current.value;
+		const todoDueDate = TodoDueDateRef.current.value;
+
+		if (todoName && todoDueDate) {
+			onNewItem(todoName, todoDueDate);
+			TodoNameRef.current.value = "";
+			TodoDueDateRef.current.value = "";
 		} else {
 			alert("Please enter both a todo name and a due date.");
 		}
@@ -38,8 +53,9 @@ function AddTodo({ onNewItem }) {
 						type="text"
 						className="form-control"
 						placeholder="Enter your task..."
-						onChange={onTodoNameChange}
-						value={TodoName}
+						ref = {TodoNameRef}
+						// onChange={onTodoNameChange}
+						// value={TodoName}
 					/>
 				</div>
 
@@ -47,8 +63,9 @@ function AddTodo({ onNewItem }) {
 					<input
 						type="date"
 						className="form-control"
-						onChange={onTodoDueDateChange}
-						value={TodoDueDate}
+						ref = {TodoDueDateRef}
+						// onChange={onTodoDueDateChange}
+						// value={TodoDueDate}
 					/>
 				</div>
 
