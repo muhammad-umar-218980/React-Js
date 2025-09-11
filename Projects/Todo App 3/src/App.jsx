@@ -12,18 +12,32 @@ function App() {
   //   { itemName: "Have Biryani", dueDate: "31-08-2025" }
   // ];
 
-  const [todoItems,setTodoItems] = useState([]);
+  const [todoItems, setTodoItems] = useState([]);
 
-  const addNewItem = (todoItemName, todoItemDueDate) =>{
+  const addNewItem = (todoItemName, todoItemDueDate) => {
     console.log(`Todo Item : ${todoItemName} added with Due Date : ${todoItemDueDate}`)
 
-    const newItems = [...todoItems, { itemName: todoItemName, dueDate: todoItemDueDate }];
+    // const newItems = [...todoItems, { itemName: todoItemName, dueDate: todoItemDueDate }];
 
-    setTodoItems(newItems);
+    /*
+    
+    setTodoItems((currentItems) =>{
+
+      const newItems = [...currentItems, { itemName: todoItemName, dueDate: todoItemDueDate }]
+
+      return newItems;
+    });
+    
+    */
+
+// OR
+    setTodoItems((currentItems) =>
+      [...currentItems, { itemName: todoItemName, dueDate: todoItemDueDate }]
+    );
 
   }
 
-  const deleteItem = function(itemName){
+  const deleteItem = function (itemName) {
     const newItems = todoItems.filter(item => item.itemName !== itemName);
     setTodoItems(newItems);
   }
