@@ -1,0 +1,557 @@
+📘 useReducer Hook — Complete Notes (plain TXT)
+--------------------------------------------------
+
+💡 What is useReducer?
+__________________________________________________
+
+useReducer is a React Hook that provides an alternative to useState for managing component state.
+It is based on the reducer pattern: you write a reducer function (state, action) => newState and call dispatch(action) to update state.
+useReducer is ideal for complex state logic, multiple sub-values, or when the next state depends on the previous state.
+
+🔧 Key advantages
+__________________________________________________
+
+Better for complex state transitions than many useState calls.
+
+Keeps update logic in one place (reducer), making it easier to test.
+
+dispatch has a stable identity (good for passing down to children).
+
+Supports lazy initialization for expensive initial state setup.
+
+📥 Import & basic syntax
+__________________________________________________
+
+import React, { useReducer } from "react";
+
+Signature:
+const [state, dispatch] = useReducer(reducer, initialArg, init);
+
+reducer: (state, action) => newState // pure function, no side effects
+
+initialArg: initial state value (or a value passed to init)
+
+init (optional): function(initialArg) => initialState (lazy init)
+
+state: current state
+
+dispatch: function(action) — call to update state
+
+🧭 Reducer shape and action pattern
+__________________________________________________
+
+Reducer:
+function reducer(state, action) {
+    // typically a switch or object map on action.type
+    return newState;
+}
+
+Action (common shape):
+{ type: "ACTION_TYPE", payload: someValue }
+
+Rules:
+
+Reducer must be pure (no side effects, no async, no mutations).
+
+Always return a new state object (use spread operator or produce new arrays/objects).
+
+Side effects (fetches, timers, etc.) must run in useEffect or outside the reducer.
+
+EXAMPLE 1 — Simple counter
+__________________________________________________
+
+import React, { useReducer } from "react";
+
+function counterReducer(state, action) {
+    switch (action.type) {
+        case "increment":
+            return { count: state.count + 1 };
+        case "decrement":
+            return { count: state.count - 1 };
+        case "reset":
+            return { count: action.payload || 0 };
+        default:
+            return state;
+    }
+}
+
+function Counter() {
+    const [state, dispatch] = useReducer(counterReducer, { count: 0 });
+
+    return (
+        <div>
+            <p>Count: {state.count}</p>
+            <button onClick={() => dispatch({ type: "increment" })}>+</button>
+            <button onClick={() => dispatch({ type: "decrement" })}>-</button>
+            <button onClick={() => dispatch({ type: "reset", payload: 0 })}>Reset</button>
+        </div>
+    );
+}
+
+export default Counter;
+
+Notes:
+
+state is an object {count}. You could use a number directly, but object makes extension easy.
+
+EXAMPLE 2 — Lazy initialization (init)
+__________________________________________________
+
+Use lazy initialization when initial state requires expensive computation.
+
+import React, { useReducer } from "react";
+
+function init(initialCount) {
+    return { count: initialCount };
+}
+
+function counterReducer(state, action) {
+    switch (action.type) {
+        case "increment":
+            return { count: state.count + 1 };
+        case "decrement":
+            return { count: state.count - 1 };
+        default:
+            return state;
+    }
+}
+
+function LazyCounter({ initialCount }) {
+    const [state, dispatch] = useReducer(counterReducer, initialCount, init);
+    // initialCount (number) passed to init -> {count: initialCount}
+    return (
+        <div>
+            <p>Count: {state.count}</p>
+            <button onClick={() => dispatch({ type: "increment" })}>+</button>
+        </div>
+    );
+}
+
+EXAMPLE 3 — Todo list (typical real-world use)
+__________________________________________________
+
+import React, { useReducer, useState } from "react";
+
+function todoReducer(state, action) {
+    switch (action.type) {
+        case "add":
+            return [
+                ...state,
+                { id: Date.now(), text: action.payload, completed: false }
+            ];
+        case "toggle":
+            return state.map(todo =>
+                todo.id === action.payload ? { ...todo, completed: !todo.completed } : todo
+            );
+        case "remove":
+            return state.filter(todo => todo.id !== action.payload);
+        case "edit":
+            return state.map(todo =>
+                todo.id === action.payload.id ? { ...todo, text: action.payload.text } : todo
+            );
+        case "clearCompleted":
+            return state.filter(todo => !todo.completed);
+        default:
+            return state;
+    }
+}
+
+function TodoApp() {
+    const [todos, dispatch] = useReducer(todoReducer, []);
+    const [text, setText] = useState("");
+
+    const addTodo = () => {
+        if (!text.trim()) return;
+        dispatch({ type: "add", payload: text });
+        setText("");
+    };
+
+    return (
+        <div>
+            <input value={text} onChange={e => setText(e.target.value)} />
+            <button onClick={addTodo}>Add Todo</button>
+
+            <ul>
+                {todos.map(todo => (
+                    <li key={todo.id}>
+                        <input
+                            type="checkbox"
+                            checked={todo.completed}
+                            onChange={() => dispatch({ type: "toggle", payload: todo.id })}
+                        />
+                        <span>{todo.text}</span>
+                        <button onClick={() => dispatch({ type: "remove", payload: todo.id })}>Delete</button>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+
+export default TodoApp;
+
+Notes:
+
+Working with arrays and objects: always return new arrays/objects (no mutation).
+
+id uses Date.now() for simplicity — in production use uuid or stable id.
+
+EXAMPLE 4 — Complex form / nested object updates
+__________________________________________________
+
+import React, { useReducer } from "react";
+
+const initialForm = {
+    firstName: "",
+    lastName: "",
+    address: {
+        city: "",
+        zip: ""
+    }
+};
+
+function formReducer(state, action) {
+    switch (action.type) {
+        case "update_field":
+            // action.payload: { field: "firstName", value: "Ali" }
+            return { ...state, [action.payload.field]: action.payload.value };
+        case "update_address":
+            // action.payload: { city: "Karachi" }
+            return { ...state, address: { ...state.address, ...action.payload } };
+        case "reset":
+            return initialForm;
+        default:
+            return state;
+    }
+}
+
+function Form() {
+    const [state, dispatch] = useReducer(formReducer, initialForm);
+
+    return (
+        <form>
+            <input
+                value={state.firstName}
+                onChange={e => dispatch({ type: "update_field", payload: { field: "firstName", value: e.target.value } })}
+            />
+            <input
+                value={state.address.city}
+                onChange={e => dispatch({ type: "update_address", payload: { city: e.target.value } })}
+            />
+            <button onClick={() => dispatch({ type: "reset" })}>Reset</button>
+        </form>
+    );
+}
+
+Notes:
+
+For nested updates, spread the nested object: address: { ...state.address, newFields }.
+
+EXAMPLE 5 — Async data fetching pattern with useReducer
+__________________________________________________
+
+Use reducer to manage complex fetch state: loading, error, data.
+
+import React, { useReducer, useEffect } from "react";
+
+const initialFetchState = {
+    isLoading: false,
+    isError: false,
+    data: null
+};
+
+function fetchReducer(state, action) {
+    switch (action.type) {
+        case "FETCH_INIT":
+            return { ...state, isLoading: true, isError: false };
+        case "FETCH_SUCCESS":
+            return { ...state, isLoading: false, isError: false, data: action.payload };
+        case "FETCH_FAILURE":
+            return { ...state, isLoading: false, isError: true };
+        default:
+            return state;
+    }
+}
+
+function DataFetcher({ url }) {
+    const [state, dispatch] = useReducer(fetchReducer, initialFetchState);
+
+    useEffect(() => {
+        let didCancel = false;
+
+        dispatch({ type: "FETCH_INIT" });
+
+        fetch(url)
+            .then(res => res.json())
+            .then(result => {
+                if (!didCancel) dispatch({ type: "FETCH_SUCCESS", payload: result });
+            })
+            .catch(() => {
+                if (!didCancel) dispatch({ type: "FETCH_FAILURE" });
+            });
+
+        return () => {
+            didCancel = true;
+        };
+    }, [url]);
+
+    if (state.isLoading) return <div>Loading...</div>;
+    if (state.isError) return <div>Error!</div>;
+    return <pre>{JSON.stringify(state.data, null, 2)}</pre>;
+}
+
+Notes:
+
+Never perform fetch inside reducer. Keep reducer pure; effects in useEffect.
+
+Use a cancel flag (didCancel) to avoid state updates after unmount.
+
+EXAMPLE 6 — useReducer with useContext (global-ish store)
+__________________________________________________
+
+import React, { createContext, useContext, useReducer } from "react";
+
+const StoreContext = createContext();
+
+const initialState = { user: null, theme: "light" };
+
+function rootReducer(state, action) {
+    switch (action.type) {
+        case "login":
+            return { ...state, user: action.payload };
+        case "logout":
+            return { ...state, user: null };
+        case "setTheme":
+            return { ...state, theme: action.payload };
+        default:
+            return state;
+    }
+}
+
+export function StoreProvider({ children }) {
+    const [state, dispatch] = useReducer(rootReducer, initialState);
+
+    // memoize value to avoid re-renders of consumers when unnecessary
+    const contextValue = React.useMemo(() => ({ state, dispatch }), [state]);
+
+    return <StoreContext.Provider value={contextValue}>{children}</StoreContext.Provider>;
+}
+
+export function useStore() {
+    return useContext(StoreContext); // returns { state, dispatch }
+}
+
+Usage in child:
+import React from "react";
+import { useStore } from "./StoreProvider";
+
+function Profile() {
+    const { state, dispatch } = useStore();
+    return (
+        <div>
+            <p>User: {state.user?.name || "Guest"}</p>
+            <button onClick={() => dispatch({ type: "logout" })}>Logout</button>
+        </div>
+    );
+}
+
+Notes:
+
+Wrap app in <StoreProvider> at top level.
+
+Memoize provider value: value={{ state, dispatch }} creates a new object every render; useMemo prevents unnecessary re-renders.
+
+EXAMPLE 7 — combineReducers helper (pattern)
+__________________________________________________
+
+You can compose reducers similar to Redux combineReducers.
+
+function combineReducers(reducers) {
+    return (state = {}, action) => {
+        const nextState = {};
+        let hasChanged = false;
+        for (const key in reducers) {
+            const reducer = reducers[key];
+            const previousForKey = state[key];
+            const nextForKey = reducer(previousForKey, action);
+            nextState[key] = nextForKey;
+            if (nextForKey !== previousForKey) {
+                hasChanged = true;
+            }
+        }
+        return hasChanged ? nextState : state;
+    };
+}
+
+// usage
+const rootReducer = combineReducers({ todos: todoReducer, filter: filterReducer });
+// then useReducer(rootReducer, { todos: [], filter: "all" });
+
+Action creators & constants (recommended)
+__________________________________________________
+
+Use constants to avoid typos:
+
+const INCREMENT = "INCREMENT";
+const DECREMENT = "DECREMENT";
+
+Action creators:
+const increment = () => ({ type: INCREMENT });
+const reset = value => ({ type: "RESET", payload: value });
+
+Then dispatch(increment()).
+
+Logging / wrapper for dispatch (debugging)
+__________________________________________________
+
+const [state, baseDispatch] = useReducer(reducer, initialState);
+
+// simple logger wrapper; memoize it to retain stable identity
+const dispatch = React.useCallback((action) => {
+    console.log("dispatching", action);
+    baseDispatch(action);
+}, [baseDispatch]);
+
+Notes:
+
+dispatch from useReducer is stable; wrapping it may not be necessary, but useful for logging.
+
+If you wrap, memoize it (useCallback) to avoid changing identity each render.
+
+Best practices & common gotchas
+__________________________________________________
+
+Keep reducer pure:
+
+No side effects (no fetch, no console prompts that change state).
+
+Pure computation only.
+
+Avoid state mutation:
+
+Do not mutate state in reducer. Use spread operator or produce new arrays/objects.
+
+Use constants or enums for action types:
+
+Prevent typos and easier refactor.
+
+Prefer reducer outside component:
+
+Define reducer function outside component to avoid re-creating it on each render (clarity & testability).
+
+Use lazy init for expensive initial state:
+
+Pass init function as third arg to useReducer.
+
+When used with Context, memoize provider value:
+
+const value = useMemo(() => ({ state, dispatch }), [state]);
+
+Debugging:
+
+Test reducer functions with unit tests (pure functions).
+
+Use console logs or a logger wrapper to inspect dispatched actions.
+
+When to prefer useReducer over useState:
+
+Complex state transitions or many related state values.
+
+Next state depends on previous state.
+
+You want centralized update logic and easier testing.
+
+When NOT to use useReducer:
+
+Simple independent state variables where useState is simpler.
+
+Performance notes:
+
+dispatch identity is stable; passing dispatch down is cheap.
+
+Components that read state from context will re-render when that state changes. To reduce re-renders, split contexts or memoize selections.
+
+Advanced patterns & tips (short)
+__________________________________________________
+
+Optimistic UI: update local state first (dispatch), then rollback on failure (dispatch another action). Handle carefully in reducer.
+
+Middleware-like behavior: wrap dispatch to add logging, analytics, or debug.
+
+useReducer + Immer (external lib) if many nested mutations are cumbersome: produce(draft => { draft.x = ... }). (Optional third-party lib.)
+
+Unit-test reducers easily because they are pure.
+
+Common mistakes summary
+__________________________________________________
+
+Mutating state directly (e.g., state.x = 3; return state;) — WRONG. Always return a new object.
+
+Doing async work inside reducer — WRONG. Use useEffect or component functions.
+
+Forgetting to return previous state for unknown action type — ALWAYS return state in default branch.
+
+Creating new context value object each render (causes unnecessary re-renders) — use useMemo.
+
+✅ Quick cheat-sheet
+__________________________________________________
+
+Import:
+import React, { useReducer } from "react";
+
+Reducer signature:
+function reducer(state, action) { return newState; }
+
+Hook:
+const [state, dispatch] = useReducer(reducer, initialArg, init);
+
+Dispatch example:
+dispatch({ type: "SOMETHING", payload: value });
+
+Lazy init:
+const [state, dispatch] = useReducer(reducer, initialValueOrArg, init);
+
+Use with Context:
+Provide { state, dispatch } via context; memoize provider value.
+
+Final short example (all-in-one)
+__________________________________________________
+
+import React, { useReducer, useEffect } from "react";
+
+const initialState = { count: 0, loading: false };
+
+function reducer(state, action) {
+    switch (action.type) {
+        case "increment":
+            return { ...state, count: state.count + 1 };
+        case "decrement":
+            return { ...state, count: state.count - 1 };
+        case "startLoading":
+            return { ...state, loading: true };
+        case "stopLoading":
+            return { ...state, loading: false };
+        default:
+            return state;
+    }
+}
+
+function Example() {
+    const [state, dispatch] = useReducer(reducer, initialState);
+
+    useEffect(() => {
+        dispatch({ type: "startLoading" });
+        const t = setTimeout(() => {
+            dispatch({ type: "stopLoading" });
+        }, 500);
+        return () => clearTimeout(t);
+    }, []);
+
+    return (
+        <div>
+            <p>Count: {state.count}</p>
+            <p>Loading: {String(state.loading)}</p>
+            <button onClick={() => dispatch({ type: "increment" })}>+</button>
+        </div>
+    );
+}
