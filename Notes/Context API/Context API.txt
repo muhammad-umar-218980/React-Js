@@ -1,0 +1,135 @@
+React Context API - Detailed Explanation
+-----------------------------------------
+
+💡 The Problem: Prop Drilling
+_________________________________________
+
+Normally in React, data is passed from parent to child using props.
+
+When a deeply nested component needs some data, you have to pass it through every intermediate component, even if they don’t use it.
+
+This becomes messy and hard to maintain in large applications.
+
+Example:
+App → ComponentA → ComponentB → ComponentC → ComponentD (D needs the data, but A, B, C just pass it down).
+
+💡 What is Context API?
+_________________________________________
+
+Context API allows you to create a global data store that can be accessed by any component in the tree, without explicitly passing props down.
+
+It’s built into React, so no external library is needed.
+
+It’s useful for things like:
+🔹 Theme (dark/light mode)
+🔹 Authentication (user login info)
+🔹 Language settings
+🔹 Global state (like Redux but simpler)
+
+⚙️ Core Components of Context API
+_________________________________________
+
+1️⃣ React.createContext()
+
+Used to create a new Context.
+
+Returns two components: Provider and Consumer.
+
+Example:
+const MyContext = React.createContext();
+
+2️⃣ Provider
+
+Provides (supplies) the data to components.
+
+Wrap your component tree with the Provider.
+
+Accepts a value prop which is the data you want to share.
+
+Example:
+<MyContext.Provider value={"Hello World"}>
+<ChildComponent />
+</MyContext.Provider>
+
+3️⃣ Consumer
+
+Used by components to consume (access) the context value.
+
+Example:
+<MyContext.Consumer>
+{value => <h1>{value}</h1>}
+</MyContext.Consumer>
+
+4️⃣ useContext Hook
+
+In modern React, instead of Consumer, we often use the useContext hook.
+
+This makes consuming context simpler and cleaner.
+
+Example:
+import React, { useContext } from "react";
+const value = useContext(MyContext);
+
+📝 Step-by-Step Example
+_________________________________________
+
+import React, { createContext, useContext } from "react";
+
+// 1. Create Context
+const UserContext = createContext();
+
+// 2. Create a Provider
+function App() {
+return (
+<UserContext.Provider value={"Muhammad Umar"}>
+<Profile />
+</UserContext.Provider>
+);
+}
+
+// 3. Consume Context in a child component
+function Profile() {
+const user = useContext(UserContext);
+return <h1>Hello, {user}</h1>;
+}
+
+export default App;
+
+🕰️ When to Use Context API
+_________________________________________
+
+✅ Use it when:
+
+Many components need access to the same data (global state).
+
+Passing props becomes repetitive or difficult.
+
+❌ Don’t use it when:
+
+Data is only used by a few components (props are fine).
+
+You need complex state management (Redux/Zustand might be better).
+
+🔥 Advantages of Context API
+_________________________________________
+
+No need for third-party libraries (built into React).
+
+Solves prop drilling issue.
+
+Makes global data management simple.
+
+⚠️ Limitations of Context API
+_________________________________________
+
+All components that use context re-render when the context value changes.
+
+Not suitable for very large applications with heavy state updates.
+
+Can make components less reusable (too dependent on global context).
+
+✅ Conclusion
+_________________________________________
+
+Context API is a simple and effective way to avoid prop drilling and share data globally in React.
+It’s perfect for themes, authentication, and global state where many components need access to the same information.
